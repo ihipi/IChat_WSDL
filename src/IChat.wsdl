@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<wsdl:definitions xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://www.example.org/IChat/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="IChat" targetNamespace="http://www.example.org/IChat/">
+  <wsdl:types>
+    <xsd:schema targetNamespace="http://www.example.org/IChat/">
+      <xsd:element name="MSESend" type="tns:mseSend"></xsd:element>
+      <xsd:element name="MSSSend" type="tns:MSSSend"></xsd:element>
+
+      <xsd:complexType name="mseSend">
+      	<xsd:sequence>
+      		<xsd:element name="message" type="xsd:string"></xsd:element>
+      	</xsd:sequence>
+      	<xsd:attribute name="from" type="xsd:string"></xsd:attribute>
+      	<xsd:attribute name="to" type="xsd:string"></xsd:attribute>
+      </xsd:complexType>
+    
+      <xsd:complexType name="MSSSend">
+      	<xsd:sequence>
+      		<xsd:element name="operationResult" type="xsd:string"></xsd:element>
+      	</xsd:sequence>
+      </xsd:complexType>
+      <xsd:element name="MSERecive" type="tns:MSSRecive"></xsd:element>
+      <xsd:element name="MSSRecive" type="tns:MSSRecive"></xsd:element>
+    
+      <xsd:complexType name="MSSRecive">
+      	<xsd:sequence>
+      		<xsd:element name="message" type="xsd:string"></xsd:element>
+      	</xsd:sequence>
+      	<xsd:attribute name="from" type="xsd:string"></xsd:attribute>
+      </xsd:complexType>
+    
+      <xsd:complexType name="MSERecive">
+      	<xsd:attribute name="user" type="xsd:string"></xsd:attribute>
+      </xsd:complexType>
+      <xsd:element name="MSEaddUser" type="tns:MSEaddUser">
+      </xsd:element>
+      <xsd:element name="addUserResponse">
+      	<xsd:complexType>
+      		<xsd:sequence>
+      			<xsd:element name="out" type="xsd:string"></xsd:element>
+      		</xsd:sequence>
+      	</xsd:complexType>
+      </xsd:element>
+    
+            <xsd:complexType name="MSEaddUser"></xsd:complexType>
+        </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="sendRequest">
+    <wsdl:part element="tns:MSESend" name="parameters"/>
+  </wsdl:message>
+  <wsdl:message name="sendResponse">
+    <wsdl:part element="tns:MSSSend" name="parameters"/>
+  </wsdl:message>
+  <wsdl:message name="reciveRequest">
+  	<wsdl:part name="parameters" element="tns:MSERecive"></wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="reciveResponse">
+  	<wsdl:part name="parameters" element="tns:MSSRecive"></wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="addUserRequest">
+  	<wsdl:part name="parameters" element="tns:MSEaddUser"></wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="addUserResponse">
+  	<wsdl:part name="parameters" element="tns:addUserResponse"></wsdl:part>
+  </wsdl:message>
+  <wsdl:portType name="IChat">
+    <wsdl:operation name="send">
+      <wsdl:input message="tns:sendRequest"/>
+      <wsdl:output message="tns:sendResponse"/>
+    </wsdl:operation>
+    <wsdl:operation name="recive">
+    	<wsdl:input message="tns:reciveRequest"></wsdl:input>
+    	<wsdl:output message="tns:reciveResponse"></wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="addUser">
+    	<wsdl:input message="tns:addUserRequest"></wsdl:input>
+    	<wsdl:output message="tns:addUserResponse"></wsdl:output>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="IChatSOAP" type="tns:IChat">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="send">
+      <soap:operation soapAction="http://www.example.org/IChat/send"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="IChat">
+    <wsdl:port binding="tns:IChatSOAP" name="IChatSOAP">
+      <soap:address location="http://www.example.org/"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>
